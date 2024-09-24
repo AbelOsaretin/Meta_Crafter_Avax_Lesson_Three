@@ -1,66 +1,94 @@
-## Foundry
+# AbelToken
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+`AbelToken` is an ERC-20 token contract built on Solidity that implements token minting, burning, and ownership functionalities using OpenZeppelin libraries. This contract allows the owner to mint tokens and gives token holders the ability to burn their tokens.
 
-Foundry consists of:
+## Features
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+- **Minting**: Only the contract owner can mint new tokens.
+- **Burning**: Token holders can burn their tokens, reducing the total supply.
+- **Ownership**: The contract has an owner who controls minting rights. Ownership can be transferred.
 
-## Documentation
+## Requirements
 
-https://book.getfoundry.sh/
+- Solidity version ^0.8.0
+- OpenZeppelin Contracts (for ERC20, ERC20Burnable, and Ownable functionality)
+
+## Installation
+
+To use the `AbelToken` contract, you need to install the OpenZeppelin Contracts library in your project.
+
+```bash
+forge
+```
+
+## Contract Details
+
+### Constructor
+
+The constructor initializes the token with the following parameters:
+
+- **Token Name**: AbelToken
+- **Token Symbol**: ATK
+- **Initial Owner**: The address provided during contract deployment becomes the owner of the contract.
+
+```solidity
+constructor(address initialOwner) ERC20("AbelToken", "ATK") Ownable(initialOwner) {}
+```
+
+### Functions
+
+1. **mint**
+
+   Mints new tokens to a specified address. Only the owner can call this function.
+
+   ```solidity
+   function mint(address to, uint256 amount) public onlyOwner
+   ```
+
+   - `to`: Address of the recipient who will receive the newly minted tokens.
+   - `amount`: The number of tokens to mint.
+
+2. **burn**
+
+   Allows token holders to burn their tokens, which reduces the total supply.
+
+   This functionality is inherited from `ERC20Burnable`:
+
+   ```solidity
+   function burn(uint256 amount) public
+   ```
 
 ## Usage
 
-### Build
+1. **Deploying the Contract**
 
-```shell
-$ forge build
-```
+   Deploy the contract using a Solidity deployment framework like Remix, Truffle, or Hardhat. Pass the owner's address during deployment:
 
-### Test
+   ```solidity
+   $ forge script script/Token.s.sol:TokenScript --rpc-url <your_rpc_url> --private-key <your_private_key>
+   ```
 
-```shell
-$ forge test
-```
+2. **Minting Tokens**
 
-### Format
+   After deployment, the owner can mint tokens by calling the `mint` function:
 
-```shell
-$ forge fmt
-```
+   ```solidity
+   abelToken.mint(toAddress, tokenAmount);
+   ```
 
-### Gas Snapshots
+3. **Burning Tokens**
 
-```shell
-$ forge snapshot
-```
+   Token holders can burn tokens by calling the `burn` function:
 
-### Anvil
+   ```solidity
+   abelToken.burn(tokenAmount);
+   ```
 
-```shell
-$ anvil
-```
+## License
 
-### Deploy
+This contract is licensed under the MIT License.
 
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
+### Additional Notes:
 
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+- Replace `initialOwner`, `toAddress`, and `tokenAmount` with actual values when interacting with the contract.
+- You can modify the token's behavior by changing its parameters or adding new functionality as needed.
