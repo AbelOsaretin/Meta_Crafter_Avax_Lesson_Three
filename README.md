@@ -1,94 +1,106 @@
-# AbelToken
+Here's a README file for the `AbelToken` contract:
 
-`AbelToken` is an ERC-20 token contract built on Solidity that implements token minting, burning, and ownership functionalities using OpenZeppelin libraries. This contract allows the owner to mint tokens and gives token holders the ability to burn their tokens.
+---
+
+# AbelToken Smart Contract
+
+`AbelToken` is a simple ERC20-like token contract deployed on the Ethereum blockchain. This contract allows the owner to mint, transfer, and burn tokens, providing basic functionalities to manage the token supply and balance of different accounts.
 
 ## Features
 
-- **Minting**: Only the contract owner can mint new tokens.
-- **Burning**: Token holders can burn their tokens, reducing the total supply.
-- **Ownership**: The contract has an owner who controls minting rights. Ownership can be transferred.
+- **Minting**: The owner can mint new tokens, increasing the total supply.
+- **Transfers**: Users can transfer tokens between addresses.
+- **Burning**: Users can burn tokens, reducing the total supply.
+- **Owner-Only Access**: Only the owner can mint tokens.
 
 ## Requirements
 
-- Solidity version ^0.8.0
-- OpenZeppelin Contracts (for ERC20, ERC20Burnable, and Ownable functionality)
+- Solidity version: `^0.8.0`
+- Ethereum environment (such as Remix, Hardhat, or Foundry)
 
-## Installation
+## Contract Overview
 
-To use the `AbelToken` contract, you need to install the OpenZeppelin Contracts library in your project.
+The contract contains the following state variables:
 
-```bash
-forge
-```
+- `owner`: The address of the contract owner.
+- `name`: The name of the token, set to "AbelToken".
+- `symbol`: The symbol of the token, set to "ABEL".
+- `decimals`: The number of decimal places the token supports (18).
+- `totalSupply`: The total supply of the tokens in circulation.
+- `balances`: A mapping that tracks the balance of each address.
 
-## Contract Details
+## Functions
 
-### Constructor
-
-The constructor initializes the token with the following parameters:
-
-- **Token Name**: AbelToken
-- **Token Symbol**: ATK
-- **Initial Owner**: The address provided during contract deployment becomes the owner of the contract.
+### Name
 
 ```solidity
-constructor(address initialOwner) ERC20("AbelToken", "ATK") Ownable(initialOwner) {}
+function Name() external view returns (string memory)
 ```
 
-### Functions
+Returns the name of the token ("AbelToken").
 
-1. **mint**
+### Symbol
 
-   Mints new tokens to a specified address. Only the owner can call this function.
+```solidity
+function Symbol() external view returns (string memory)
+```
 
-   ```solidity
-   function mint(address to, uint256 amount) public onlyOwner
-   ```
+Returns the symbol of the token ("ABEL").
 
-   - `to`: Address of the recipient who will receive the newly minted tokens.
-   - `amount`: The number of tokens to mint.
+### Decimals
 
-2. **burn**
+```solidity
+function Decimals() external view returns (uint8)
+```
 
-   Allows token holders to burn their tokens, which reduces the total supply.
+Returns the number of decimals (18).
 
-   This functionality is inherited from `ERC20Burnable`:
+### TotalSupply
 
-   ```solidity
-   function burn(uint256 amount) public
-   ```
+```solidity
+function TotalSupply() external view returns (uint256)
+```
 
-## Usage
+Returns the total supply of the token.
 
-1. **Deploying the Contract**
+### BalanceOf
 
-   Deploy the contract using a Solidity deployment framework like Remix, Truffle, or Hardhat. Pass the owner's address during deployment:
+```solidity
+function BalanceOf(address account) external view returns (uint256)
+```
 
-   ```solidity
-   $ forge script script/Token.s.sol:TokenScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-   ```
+Returns the balance of the specified address.
 
-2. **Minting Tokens**
+### Mint
 
-   After deployment, the owner can mint tokens by calling the `mint` function:
+```solidity
+function Mint(uint256 amount) external onlyOwner returns (bool)
+```
 
-   ```solidity
-   abelToken.mint(toAddress, tokenAmount);
-   ```
+Allows the owner to mint new tokens, increasing the total supply. The minted tokens are added to the owner's balance.
 
-3. **Burning Tokens**
+### Transfer
 
-   Token holders can burn tokens by calling the `burn` function:
+```solidity
+function Transfer(address recipient, uint256 amount) external returns (bool)
+```
 
-   ```solidity
-   abelToken.burn(tokenAmount);
-   ```
+Transfers tokens from the caller's address to the recipient address.
+
+### Burn
+
+```solidity
+function Burn(uint256 amount) external returns (bool)
+```
+
+Allows the caller to burn tokens, decreasing the total supply.
+
+## Events
+
+- **Transfered**: Emitted when tokens are transferred between addresses.
+- **Minted**: Emitted when new tokens are minted by the owner.
+- **Burned**: Emitted when tokens are burned.
 
 ## License
 
-This contract is licensed under the MIT License.
-
-### Additional Notes:
-
-- Replace `initialOwner`, `toAddress`, and `tokenAmount` with actual values when interacting with the contract.
-- You can modify the token's behavior by changing its parameters or adding new functionality as needed.
+## This project is licensed under the MIT License
