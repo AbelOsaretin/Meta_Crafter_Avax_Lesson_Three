@@ -1,106 +1,82 @@
-Here's a README file for the `AbelToken` contract:
-
----
-
 # AbelToken Smart Contract
 
-`AbelToken` is a simple ERC20-like token contract deployed on the Ethereum blockchain. This contract allows the owner to mint, transfer, and burn tokens, providing basic functionalities to manage the token supply and balance of different accounts.
+## Overview
 
-## Features
+The `AbelToken` contract is an ERC20-compliant token that incorporates additional functionality like token minting and burning. This contract also leverages OpenZeppelin’s `Ownable` to restrict minting capabilities to the contract owner. The `AbelToken` can be used as a standard fungible token with the ability to mint new tokens, burn existing ones, and transfer tokens between addresses.
 
-- **Minting**: The owner can mint new tokens, increasing the total supply.
-- **Transfers**: Users can transfer tokens between addresses.
-- **Burning**: Users can burn tokens, reducing the total supply.
-- **Owner-Only Access**: Only the owner can mint tokens.
+### Features:
 
-## Requirements
+- ERC20 token standard compliant.
+- Minting functionality, restricted to the contract owner.
+- Burning functionality, allowing users to destroy tokens.
+- Ownership control using the `Ownable` pattern.
 
-- Solidity version: `^0.8.0`
-- Ethereum environment (such as Remix, Hardhat, or Foundry)
+## Contract Details
 
-## Contract Overview
+### Inheritance
 
-The contract contains the following state variables:
+This contract inherits the following from OpenZeppelin:
 
-- `owner`: The address of the contract owner.
-- `name`: The name of the token, set to "AbelToken".
-- `symbol`: The symbol of the token, set to "ABEL".
-- `decimals`: The number of decimal places the token supports (18).
-- `totalSupply`: The total supply of the tokens in circulation.
-- `balances`: A mapping that tracks the balance of each address.
+1. **ERC20**: Implements the ERC20 standard.
+2. **ERC20Burnable**: Allows token holders to burn (destroy) their tokens.
+3. **Ownable**: Restricts certain functions to the contract owner (for example, minting).
 
-## Functions
-
-### Name
+### Constructor
 
 ```solidity
-function Name() external view returns (string memory)
+constructor(address initialOwner)
 ```
 
-Returns the name of the token ("AbelToken").
+- **Parameters**: `initialOwner` is the address that will be the owner of the contract.
+- The constructor initializes the token with a name (`AbelToken`), a symbol (`ATK`), and sets the initial owner of the contract.
 
-### Symbol
+### Functions
+
+#### `mint`
 
 ```solidity
-function Symbol() external view returns (string memory)
+function mint(address to, uint256 amount) public onlyOwner
 ```
 
-Returns the symbol of the token ("ABEL").
+- **Description**: This function allows the contract owner to mint new tokens.
+- **Parameters**:
+  - `to`: The address that will receive the minted tokens.
+  - `amount`: The number of tokens to mint.
+- **Access Control**: Only the contract owner can call this function.
 
-### Decimals
+#### `burn`
 
 ```solidity
-function Decimals() external view returns (uint8)
+function burn(uint256 amount) public override
 ```
 
-Returns the number of decimals (18).
+- **Description**: Allows any token holder to burn their own tokens, effectively reducing the total supply.
+- **Parameters**:
+  - `amount`: The number of tokens to burn.
 
-### TotalSupply
+#### `transfer`
 
 ```solidity
-function TotalSupply() external view returns (uint256)
+function transfer(address to, uint256 amount) public override returns (bool)
 ```
 
-Returns the total supply of the token.
+- **Description**: Transfers tokens from the caller's account to another account.
+- **Parameters**:
+  - `to`: The recipient of the tokens.
+  - `amount`: The number of tokens to transfer.
 
-### BalanceOf
+#### `transferFrom`
 
 ```solidity
-function BalanceOf(address account) external view returns (uint256)
+function transferFrom(address from, address to, uint256 amount) public override returns (bool)
 ```
 
-Returns the balance of the specified address.
-
-### Mint
-
-```solidity
-function Mint(uint256 amount) external onlyOwner returns (bool)
-```
-
-Allows the owner to mint new tokens, increasing the total supply. The minted tokens are added to the owner's balance.
-
-### Transfer
-
-```solidity
-function Transfer(address recipient, uint256 amount) external returns (bool)
-```
-
-Transfers tokens from the caller's address to the recipient address.
-
-### Burn
-
-```solidity
-function Burn(uint256 amount) external returns (bool)
-```
-
-Allows the caller to burn tokens, decreasing the total supply.
-
-## Events
-
-- **Transfered**: Emitted when tokens are transferred between addresses.
-- **Minted**: Emitted when new tokens are minted by the owner.
-- **Burned**: Emitted when tokens are burned.
+- **Description**: Allows the caller to transfer tokens from a specified address to another.
+- **Parameters**:
+  - `from`: The address from which the tokens will be transferred.
+  - `to`: The recipient of the tokens.
+  - `amount`: The number of tokens to transfer.
 
 ## License
 
-## This project is licensed under the MIT License
+This project is licensed under the MIT License.
