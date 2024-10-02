@@ -16,7 +16,7 @@ contract AbelToken is ERC20, ERC20Burnable, Ownable {
     }
 
     function burn(uint256 _amount) public override {
-        burn(_amount);
+        _burn(msg.sender, _amount);
     }
 
     function transfer(
