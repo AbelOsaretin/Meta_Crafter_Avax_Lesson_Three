@@ -23,7 +23,8 @@ contract AbelToken is ERC20, ERC20Burnable, Ownable {
         address _to,
         uint256 _amount
     ) public override returns (bool) {
-        transfer(_to, _amount);
+        _transfer(msg.sender, _to, _amount);
+        return true;
     }
 
     function transferFrom(
@@ -31,6 +32,7 @@ contract AbelToken is ERC20, ERC20Burnable, Ownable {
         address _to,
         uint256 _amount
     ) public override returns (bool) {
-        transferFrom(_from, _to, _amount);
+        _transfer(_from, _to, _amount);
+        return true;
     }
 }
